@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الضاد التعليمية - اللغة العربية للثاني عشر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #d97706;
+            --blue: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header & Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+        }
+        .navbar h1 { font-size: 1.5rem; font-weight: 800; color: #fff; }
+        .navbar .subtitle { font-size: 0.85rem; color: #93c5fd; }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #e2e8f0;
+            padding: 6px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--blue);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Section Cards */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+        }
+        .card-header h2 { font-size: 1.25rem; color: var(--primary); }
+
+        /* Poem Container */
+        .poem-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .poem-row {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            border-right: 4px solid var(--accent);
+        }
+
+        /* Audio Recorder Box */
+        .recorder-box {
+            background: #eff6ff;
+            border: 2px dashed #93c5fd;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .rec-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: 0.2s;
+        }
+        .rec-btn.stop { background: var(--primary); }
+        .audio-player { margin-top: 15px; width: 100%; }
+
+        /* Question Box */
+        .q-option {
+            display: block;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .q-option input { margin-left: 10px; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .poem-row { flex-direction: column; text-align: center; gap: 5px; }
+            .navbar { flex-direction: column; text-align: center; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar Header -->
+    <div class="navbar">
+        <div>
+            <h1>منصة التميز في اللغة العربية</h1>
+            <div class="subtitle">الصف الثاني عشر (بنين) | بإشراف الأستاذ: محمود الكرطاني</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 20px; font-size: 0.85rem;">
+            الوحدة الأولى: نص المتنبي
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(0)">📖 1. القراءة والتسجيل الصوتي</button>
+        <button class="tab-btn" onclick="switchTab(1)">🎧 2. مهارة الاستماع والفهم</button>
+        <button class="tab-btn" onclick="switchTab(2)">📝 3. التقييم التفاعلي</button>
+        <button class="tab-btn" onclick="switchTab(3)">✍️ 4. التعبير والكتابة</button>
+    </div>
+
+    <!-- Tab 1: القراءة والتسجيل الصوتي -->
+    <div class="tab-content active">
+        <div class="card">
+            <div class="card-header">
+                <h2>أولاً: نص "أرق على أرق" وممارسة الأداء الصوتي</h2>
+            </div>
+            <p style="margin-bottom: 15px; color: #64748b;">اقرأ الأبيات الشعرية قراءة جهرية معبرة مراعياً ضبط أواخر الكلمات ومخارج الحروف الصحيحة:</p>
+            
+            <div class="poem-grid">
+                <div class="poem-row"><span>أَرَقٌ عَلى أَرَقٍ وَمِثلي يَأَرَقُ</span><span>وَجَوىً يَزيدُ وَعَبرَةٌ تَتَرَقَرَقُ</span></div>
+                <div class="poem-row"><span>جَهدُ الصَبابَةِ أَن تَكونَ كَما أَرى</span><span>عَيناً مُسَهَّدَةً وَقَلباً يَخفِقُ</span></div>
+                <div class="poem-row"><span>ما لاحَ بَرقٌ أَو تَرَنَّمَ طائِرٌ</span><span>إِلّا اِنثَنَيتُ وَلي فُؤادٌ شَيقُ</span></div>
+                <div class="poem-row"><span>جَرَّبتُ مِن نارِ الهَوى ما تَشتَفي</span><span>نارُ الغَضا وَتَكِلُّ عَمّا تُحرِقُ</span></div>
+                <div class="poem-row"><span>وَعَذَلتُ أَهلَ العِشقِ حَتّى ذُقتُهُ</span><span>فَعَجِبتُ كَيفَ يَموتُ مَن لا يَعشَقُ</span></div>
+            </div>
+
+            <!-- Audio Recorder Widget -->
+            <div class="recorder-box">
+                <h3>🎙️ استديو تسجيل القراءة الجهرية للطالب</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 5px;">اضغط على زر التسجيل وسجّل قراءتك للأبيات، ثم استمع لتسجيلك وقَيّم أدائك:</p>
+                
+                <div style="margin-top: 15px;">
+                    <button class="rec-btn" id="startRecBtn" onclick="startRecording()">🔴 بدء التسجيل</button>
+                    <button class="rec-btn stop" id="stopRecBtn" onclick="stopRecording()" disabled>⏹️ إيقاف</button>
+                </div>
+                
+                <audio id="audioPlayback" class="audio-player" controls style="display:none;"></audio>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: الاستماع والفهم -->
+    <div class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <h2>ثانياً: مهارة الاستماع والتحليل الشفهي</h2>
+            </div>
+            <p style="margin-bottom: 15px;">استمع للمقطع الصوتي التعليمي الخاص بتحليل عاطفة النص والبناء اللغوي ثم أجب:</p>
+            
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p><strong>🎧 النموذج الصوتي لإلقاء القصيدة:</strong></p>
+                <audio controls style="width: 100%; margin-top: 10px;">
+                    <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+                    متصفحك لا يدعم مشغل الصوت.
+                </audio>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <h4>سؤال الاستماع:</h4>
+                <p style="margin: 10px 0;">ما العاطفة المسيطرة على الشاعر في الأبيات الخمسة الأولى؟</p>
+                <label class="q-option"><input type="radio" name="lis1"> عاطفة الفخر والحماسة بالانتصار</label>
+                <label class="q-option"><input type="radio" name="lis1"> عاطفة الشوق والشجن والحزن الصادق</label>
+                <label class="q-option"><input type="radio" name="lis1"> عاطفة الغضب والتهديد للخصوم</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: التقييم التفاعلي -->
+    <div class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <h2>ثالثاً: اختبر إتقانك للنحو والتحليل الأدبي</h2>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <p><strong>1. ما نوع الخبر في جملة "جَهدُ الصَبابَةِ أَن تَكونَ..."؟</strong></p>
+                <label class="q-option"><input type="radio" name="g1"> مفرد</label>
+                <label class="q-option"><input type="radio" name="g1"> مصدر مؤول من (أن والفعل) في محل رفع خبر</label>
+                <label class="q-option"><input type="radio" name="g1"> جملة فعلية</label>
+            </div>
+
+            <div>
+                <p><strong>2. المحسن البديعي بين (أَرَقٌ) و (يَأَرَقُ) هو:</strong></p>
+                <label class="q-option"><input type="radio" name="g2"> طباق سلب</label>
+                <label class="q-option"><input type="radio" name="g2"> جناس اشتقاقي</label>
+                <label class="q-option"><input type="radio" name="g2"> مقابلة</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 4: التعبير والكتابة -->
+    <div class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <h2>رابعاً: الكتابة والتعبير النظري</h2>
+            </div>
+            <p style="margin-bottom: 10px;">اكتب فقرة بلغة سليمة تعبر فيها عن موقف الشاعر حينذاك عندما تذوق العشق بنفسه في البيت الخامس:</p>
+            <textarea style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 1rem; outline: none;" placeholder="اكتب تحليلك هنا..."></textarea>
+            <button style="margin-top: 15px; background: var(--blue); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer;">حفظ الإجابة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(index) {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach((tab, i) => {
+            tab.classList.toggle('active', i === index);
+            contents[i].classList.toggle('active', i === index);
+        });
+    }
+
+    // Audio Recording Functionality
+    let mediaRecorder;
+    let audioChunks = [];
+
+    async function startRecording() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => { audioChunks.push(event.data); };
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audioPlayback = document.getElementById('audioPlayback');
+                audioPlayback.src = audioUrl;
+                audioPlayback.style.display = 'block';
+            };
+
+            mediaRecorder.start();
+            document.getElementById('startRecBtn').disabled = true;
+            document.getElementById('stopRecBtn').disabled = false;
+        } catch (err) {
+            alert('يرجى السماح بالوصول للميكروفون لبدء التسجيل.');
+        }
+    }
+
+    function stopRecording() {
+        if (mediaRecorder) {
+            mediaRecorder.stop();
+            document.getElementById('startRecBtn').disabled = false;
+            document.getElementById('stopRecBtn').disabled = true;
+        }
+    }
+</script>
+</body>
+</html>
