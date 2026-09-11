@@ -3,57 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة اللغة العربية - الصف الثاني عشر</title>
+    <title>منصة اللغة العربية التفاعلية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #1a5276; border-bottom: 2px solid #1a5276; padding-bottom: 10px; margin-top: 0; }
-        h2 { color: #2e4053; margin-top: 25px; }
-        ul { list-style-type: none; padding: 0; }
-        li { background: #ebf5fb; margin: 10px 0; padding: 15px; border-right: 5px solid #2980b9; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .badge { background: #2980b9; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85em; }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 50px; }
+        .hero-header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 40px 20px; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
+        .lesson-card { border: none; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .lesson-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .badge-category { font-size: 0.8rem; padding: 6px 12px; border-radius: 20px; }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <h1>المنصة التعليمية للغة العربية</h1>
-        <p>جاري تحميل المنهج التفاعلي...</p>
+
+    <div class="hero-header text-center shadow-sm">
+        <h1 class="fw-bold">المنصة التعليمية للغة العربية</h1>
+        <p class="lead mb-0">الصف الثاني عشر | المجلد الأول (2026/2027)</p>
     </div>
 
+    <div class="container">
+        <h4 class="fw-bold text-primary mb-4"><i class="bi bi-journal-bookmark-fill me-2"></i>المجال الأول: القراءة والنقد الأدبي</h4>
+        <div class="row g-3" id="lessons-container">
+            <!-- سيتم تحميل البطاقات التفاعلية هنا -->
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الدرس (Modal) -->
+    <div class="modal fade" id="lessonModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalTitle">عنوان الدرس</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- محتوى الدرس والتفاعلات -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     const curriculumData = {
-      subject: "اللغة العربية - الصف الثاني عشر (المجلد الأول 2026/2027)",
-      modules: [
-        {
-          title: "المجال الأول: القراءة والنقد الأدبي",
-          lessons: [
-            { title: "الدرس 1: النصوص حولنا (1)", type: "تطبيقات نصية وتحليل" },
-            { title: "الدرس 2: قرآن كريم – الله ولي الذين آمنوا", type: "بلاغة وتفسير" },
-            { title: "الدرس 3: مقدمة بحثية – شعر المتنبي", type: "سيرة ونقد أدبي" },
-            { title: "الدرس 4: نص شعري – أرق على أرقي (المتنبي)", type: "شعر بلاغي تحليلي" },
-            { title: "الدرس 5: نص شعري – البركة (البحتري)", type: "الوصف الطبيعي والموسيقى" },
-            { title: "الدرس 6: سيرة غيرية – سلطان بن سالم القاسمي", type: "تكامل توثيقي وسيرة الأدباء" },
-            { title: "الدرس 7: قصة قصيرة – علامة تعجب (فاطمة الكعبي)", type: "تحليل سردي ورمزي" },
-            { title: "الدرس 8: نص معلوماتي – شاعرتان مبدعتان منذ الصغر", type: "توثيق تاريخي ونقد" },
-            { title: "الدرس 9: نص معلوماتي – ذكريات وتوثيق شخصي", type: "مذكرات وتوثيق شخصي" },
-            { title: "الدرس 10: نص معلوماتي – أنسنة المدن", type: "تخطيط حضري" },
-            { title: "الدرس 11: نص معلوماتي – الذكاء الاصطناعي طبيباً", type: "علوم وتكنولوجيا وحجج" }
-          ]
-        }
+      lessons: [
+        { id: 1, title: "الدرس 1: النصوص حولنا (1)", category: "تطبيقات نصية وتحليل", icon: "bi-file-text", color: "primary", desc: "تصنيف النصوص وفق النوع (سردي، وصفي، إخباري، إقناعي...)." },
+        { id: 2, title: "الدرس 2: قرآن كريم – الله ولي الذين آمنوا", category: "بلاغة وتفسير", icon: "bi-book", color: "success", desc: "نص قرآني - بلاغة وتفسير للآيات الكريمة مع معاني المفردات." },
+        { id: 3, title: "الدرس 3: مقدمة بحثية – شعر المتنبي", category: "سيرة ونقد أدبي", icon: "bi-person-badge", color: "warning", desc: "دراسة عصر المتنبي السياسي والعلمي ورسالة حول أثر البيئة." },
+        { id: 4, title: "الدرس 4: نص شعري – أرق على أرقي", category: "شعر بلاغي تحليلي", icon: "bi-music-note-beamed", color: "danger", desc: "تحليل بلاغي وتطبيقات تسجيل صوتي للأبيات." },
+        { id: 5, title: "الدرس 5: نص شعري – البركة (البحتري)", category: "الوصف الطبيعي", icon: "bi-image", color: "info", desc: "استخراج الحقل الدلالي الخاص بعناصر الماء والحركة." },
+        { id: 6, title: "الدرس 6: سيرة غيرية – سلطان بن سالم القاسمي", category: "سيرة الأدباء", icon: "bi-journals", color: "secondary", desc: "تكامل توثيقي وإبراز الدور الثقافي للشيخ سلطان." },
+        { id: 7, title: "الدرس 7: قصة قصيرة – علامة تعجب", category: "تحليل سردي ورمزي", icon: "bi-pencil-square", color: "dark", desc: "تحليل القصة القصيرة للكاتبة فاطمة الكعبي." }
       ]
     };
 
     window.onload = function() {
-      const appContainer = document.getElementById("app");
-      let htmlContent = `<h1>${curriculumData.subject}</h1><h2>${curriculumData.modules[0].title}</h2><ul>`;
+      const container = document.getElementById("lessons-container");
+      let cardsHTML = "";
       
-      curriculumData.modules[0].lessons.forEach(lesson => {
-        htmlContent += `<li><span><strong>${lesson.title}</strong></span> <span class="badge">${lesson.type}</span></li>`;
+      curriculumData.lessons.forEach(lesson => {
+        cardsHTML += `
+          <div class="col-md-6 col-lg-4">
+            <div class="card lesson-card h-100 shadow-sm border-start border-4 border-${lesson.color}" onclick="openLesson(${lesson.id})">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="badge bg-${lesson.color} badge-category">${lesson.category}</span>
+                  <i class="bi ${lesson.icon} text-${lesson.color} fs-4"></i>
+                </div>
+                <h5 class="card-title fw-bold text-dark mt-2">${lesson.title}</h5>
+                <p class="card-text text-muted small">${lesson.desc}</p>
+              </div>
+              <div class="card-footer bg-transparent border-0 text-end">
+                <span class="btn btn-sm btn-outline-${lesson.color}">افتح الدرس <i class="bi bi-arrow-left"></i></span>
+              </div>
+            </div>
+          </div>
+        `;
       });
       
-      htmlContent += `</ul>`;
-      appContainer.innerHTML = htmlContent;
+      container.innerHTML = cardsHTML;
     };
+
+    function openLesson(id) {
+      const lesson = curriculumData.lessons.find(l => l.id === id);
+      document.getElementById("modalTitle").innerText = lesson.title;
+      document.getElementById("modalBody").innerHTML = `
+        <div class="p-2">
+            <span class="badge bg-${lesson.color} mb-3">${lesson.category}</span>
+            <h6><strong>وصف الدرس:</strong></h6>
+            <p>${lesson.desc}</p>
+            <hr>
+            <div class="alert alert-light border">
+                <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                <strong>المحتوى التفاعلي:</strong> يمكنك الآن البدء في حل التدريبات والتسجيلات الصوتية لهذا الدرس.
+            </div>
+        </div>
+      `;
+      const myModal = new bootstrap.Modal(document.getElementById('lessonModal'));
+      myModal.show();
+    }
     </script>
 </body>
 </html>
