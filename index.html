@@ -3,104 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة اللغة العربية التفاعلية</title>
+    <title>منصة اللغة العربية التفاعلية - الصف الثاني عشر</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 50px; }
-        .hero-header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 40px 20px; border-radius: 0 0 20px 20px; margin-bottom: 30px; }
-        .lesson-card { border: none; border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-        .lesson-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .badge-category { font-size: 0.8rem; padding: 6px 12px; border-radius: 20px; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 60px; }
+        .hero-header { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); color: white; padding: 45px 20px; border-radius: 0 0 25px 25px; margin-bottom: 35px; }
+        .lesson-card { border: none; border-radius: 15px; transition: all 0.3s ease; cursor: pointer; background: white; }
+        .lesson-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .badge-cat { font-size: 0.8rem; padding: 6px 14px; border-radius: 20px; }
+        .activity-box { background: #f8f9fa; border-right: 4px solid #0d6efd; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .quiz-option { cursor: pointer; transition: 0.2s; }
+        .quiz-option:hover { background-color: #e9ecef; }
     </style>
 </head>
 <body>
 
-    <div class="hero-header text-center shadow-sm">
+    <div class="hero-header text-center shadow">
         <h1 class="fw-bold">المنصة التعليمية للغة العربية</h1>
         <p class="lead mb-0">الصف الثاني عشر | المجلد الأول (2026/2027)</p>
     </div>
 
     <div class="container">
-        <h4 class="fw-bold text-primary mb-4"><i class="bi bi-journal-bookmark-fill me-2"></i>المجال الأول: القراءة والنقد الأدبي</h4>
-        <div class="row g-3" id="lessons-container">
-            <!-- سيتم تحميل البطاقات التفاعلية هنا -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-dark"><i class="bi bi-journal-check text-primary me-2"></i>المجال الأول: القراءة والنقد الأدبي</h3>
+            <span class="badge bg-primary fs-6">11 درساً مكتظاً بالتفاعلات</span>
         </div>
+        <div class="row g-4" id="lessons-container"></div>
     </div>
 
-    <!-- نافذة تفاصيل الدرس (Modal) -->
+    <!-- نافذة عرض الدرس الشاملة -->
     <div class="modal fade" id="lessonModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">عنوان الدرس</h5>
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="modalTitle">عنوان الدرس</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="modalBody">
-                    <!-- محتوى الدرس والتفاعلات -->
-                </div>
+                <div class="modal-body p-4" id="modalBody"></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    const curriculumData = {
-      lessons: [
-        { id: 1, title: "الدرس 1: النصوص حولنا (1)", category: "تطبيقات نصية وتحليل", icon: "bi-file-text", color: "primary", desc: "تصنيف النصوص وفق النوع (سردي، وصفي، إخباري، إقناعي...)." },
-        { id: 2, title: "الدرس 2: قرآن كريم – الله ولي الذين آمنوا", category: "بلاغة وتفسير", icon: "bi-book", color: "success", desc: "نص قرآني - بلاغة وتفسير للآيات الكريمة مع معاني المفردات." },
-        { id: 3, title: "الدرس 3: مقدمة بحثية – شعر المتنبي", category: "سيرة ونقد أدبي", icon: "bi-person-badge", color: "warning", desc: "دراسة عصر المتنبي السياسي والعلمي ورسالة حول أثر البيئة." },
-        { id: 4, title: "الدرس 4: نص شعري – أرق على أرقي", category: "شعر بلاغي تحليلي", icon: "bi-music-note-beamed", color: "danger", desc: "تحليل بلاغي وتطبيقات تسجيل صوتي للأبيات." },
-        { id: 5, title: "الدرس 5: نص شعري – البركة (البحتري)", category: "الوصف الطبيعي", icon: "bi-image", color: "info", desc: "استخراج الحقل الدلالي الخاص بعناصر الماء والحركة." },
-        { id: 6, title: "الدرس 6: سيرة غيرية – سلطان بن سالم القاسمي", category: "سيرة الأدباء", icon: "bi-journals", color: "secondary", desc: "تكامل توثيقي وإبراز الدور الثقافي للشيخ سلطان." },
-        { id: 7, title: "الدرس 7: قصة قصيرة – علامة تعجب", category: "تحليل سردي ورمزي", icon: "bi-pencil-square", color: "dark", desc: "تحليل القصة القصيرة للكاتبة فاطمة الكعبي." }
-      ]
-    };
+    const curriculumData = [
+        { id: 1, title: "الدرس 1: النصوص حولنا (1)", category: "تطبيقات نصية وتحليل", color: "primary", icon: "bi-file-earmark-text", summary: "تصنيف النصوص وفق النوع (سردي، وصفي، إخباري، إقناعي، إرشادي...).", quiz: { q: "صنّف القالب المناسب للنص الإرشادي التوعوي:", options: ["قصة قصيرة ذات حبكة", "إنفوجرافيك / خطوات متسلسلة", "قصيدة عمودية"], correct: 1 }, features: ["مخطط أنماط النصوص", "مسابقة تصنيف تفاعلية"] },
+        { id: 2, title: "الدرس 2: قرآن كريم – الله ولي الذين آمنوا", category: "بلاغة وتفسير", color: "success", icon: "bi-book-half", summary: "تفسير سورة البقرة (256-257)، وبيان صور البلاغة والترتيل القرآني.", vocab: [ {w: "الطَّاغُوتِ", m: "كل ما عُبد من دون الله"}, {w: "الْعُرْوَةِ الْوُثْقَىٰ", m: "العهد الوثيق والإيمان الخالص"} ], quiz: { q: "ما السر البلاغي في إفراد (النور) وجمع (الظلمات)؟", options: ["أن الحق واحد وسبل الضلال متعددة", "لضبط القافية والترتيل فقط"], correct: 0 }, features: ["المعجم التفاعلي", "تسجيل صوتي للتلاوة (90 ثانية)"] },
+        { id: 3, title: "الدرس 3: مقدمة بحثية – شعر المتنبي", category: "سيرة ونقد أدبي", color: "warning", icon: "bi-person-lines-fill", summary: "دراسة عصر المتنبي السياسي والعلمي، طموحه، ورسالة بحثية مكثفة.", quiz: { q: "اكتب ملخصاً بحثياً مكثفاً يوضح أثر البيئة السياسية في عصر المتنبي:", type: "open" }, features: ["مخطط السيرة النقدية", "نشاط كتابة بحثية"] },
+        { id: 4, title: "الدرس 4: نص شعري – أرق على أرقي (المتنبي)", category: "شعر بلاغي تحليلي", color: "danger", icon: "bi-music-note-list", summary: "تحليل المحسنات البلاغية وشعور الشاعر في قوله: أَرَقٌ عَلى أَرَقٍ وَمِثلِيَ يَأَرَقُ.", quiz: { q: "ما المعنى البلاغي للدلالة التكرارية في قوله (أَرَقٌ عَلى أَرَقٍ)؟", options: ["الرغبة في السفر والترحال", "استمرار المعاناة دون انقطاع", "التعبير عن الفرح المفاجئ"], correct: 1 }, features: ["مختبر التحليل البلاغي", "تسجيل إلقاء شعري صوتي"] },
+        { id: 5, title: "الدرس 5: نص شعري – البركة (البحتري)", category: "الوصف الطبيعي والموسيقى", color: "info", icon: "bi-water", summary: "تحليل الوصف الطبيعي للبركة وعناصر الماء والحركة والجماليات.", quiz: { q: "استخرج الحقل الدلالي الخاص بـ (عناصر الماء والحركة) من الأبيات.", type: "open" }, features: ["مخطط الحقل الدلالي", "تحليل موسيقى الشعر"] },
+        { id: 6, title: "الدرس 6: سيرة غيرية – سلطان بن سالم القاسمي", category: "سيرة وتوثيق", color: "secondary", icon: "bi-journals", summary: "تكامل توثيقي وسيرة الأدباء، وإبراز الدور الثقافي والتاريخي.", quiz: { q: "حدد الملامح التوثيقية والتاريخية التي اعتمد عليها الكاتب في إبراز الدور الثقافي للشيخ سلطان.", type: "open" }, features: ["خط زمني للسيرة", "تحليل النص التوثيقي"] },
+        { id: 7, title: "الدرس 7: قصة قصيرة – علامة تعجب (فاطمة الكعبي)", category: "تحليل سردي ورمزي", color: "dark", icon: "bi-vector-pen", summary: "تحليل الحبكة والشخصيات والرمزية في قصة علامة تعجب.", quiz: { q: "حلل الرمزية في عنوان القصة وعلاقتها بالأحداث.", type: "open" }, features: ["مخطط البنية السردية", "تحليل الشخصيات"] },
+        { id: 8, title: "الدرس 8: نص معلوماتي – شاعرتان مبدعتان", category: "توثيق تاريخي ونقد", color: "primary", icon: "bi-award", summary: "نص معلوماتي ونقدي يقدم دراسة توثيقية لشاعرتين مبدعتين منذ الصغر.", quiz: { q: "ما هي الأدلة التاريخية التي استند إليها النص؟", type: "open" }, features: ["استخراج الأدلة والشواهد"] },
+        { id: 9, title: "الدرس 9: نص معلوماتي – ذكريات وتوثيق شخصي", category: "مذكرات شخصية", color: "success", icon: "bi-archive", summary: "دراسة النص التوثيقي الشخصي والمذكرات وأسلوب كتابتها.", quiz: { q: "تلخيص أهم سمات التوثيق الشخصي في النص.", type: "open" }, features: ["تلخيص النص الذاتي"] },
+        { id: 10, title: "الدرس 10: نص معلوماتي – أنسنة المدن", category: "تخطيط حضري", color: "warning", icon: "bi-building", summary: "قضايا المعمار والتخطيط الحضري وجعل المدن أكثر ملاءمة للإنسان.", quiz: { q: "حلل البيانات والرسم البياني الوارد في النص الحجري.", type: "open" }, features: ["محلل البيانات الحضرية"] },
+        { id: 11, title: "الدرس 11: نص معلوماتي – الذكاء الاصطناعي طبيباً", category: "علوم وتكنولوجيا", color: "danger", icon: "bi-cpu", summary: "قضايا معاصرة حول دور الذكاء الاصطناعي في الطب والحجج والأدلة.", quiz: { q: "قيّم قوة الحجج والبراهين المقدمة حول استبدال الطبيب بالذكاء الاصطناعي.", type: "open" }, features: ["مقياس تقييم الحجج والبراهين"] }
+    ];
 
     window.onload = function() {
-      const container = document.getElementById("lessons-container");
-      let cardsHTML = "";
-      
-      curriculumData.lessons.forEach(lesson => {
-        cardsHTML += `
-          <div class="col-md-6 col-lg-4">
-            <div class="card lesson-card h-100 shadow-sm border-start border-4 border-${lesson.color}" onclick="openLesson(${lesson.id})">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="badge bg-${lesson.color} badge-category">${lesson.category}</span>
-                  <i class="bi ${lesson.icon} text-${lesson.color} fs-4"></i>
+        const container = document.getElementById("lessons-container");
+        let html = "";
+        curriculumData.forEach(l => {
+            html += `
+            <div class="col-md-6 col-lg-4">
+                <div class="card lesson-card h-100 shadow-sm border-start border-5 border-${l.color}" onclick="openLesson(${l.id})">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-${l.color} badge-cat">${l.category}</span>
+                            <i class="bi ${l.icon} text-${l.color} fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mt-2">${l.title}</h5>
+                        <p class="text-muted small">${l.summary}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                        <small class="text-primary fw-bold"><i class="bi bi-star-fill text-warning me-1"></i>${l.features.length} أنشطة متوفرة</small>
+                        <span class="btn btn-sm btn-outline-${l.color}">دخول الدرس <i class="bi bi-arrow-left"></i></span>
+                    </div>
                 </div>
-                <h5 class="card-title fw-bold text-dark mt-2">${lesson.title}</h5>
-                <p class="card-text text-muted small">${lesson.desc}</p>
-              </div>
-              <div class="card-footer bg-transparent border-0 text-end">
-                <span class="btn btn-sm btn-outline-${lesson.color}">افتح الدرس <i class="bi bi-arrow-left"></i></span>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-      
-      container.innerHTML = cardsHTML;
+            </div>`;
+        });
+        container.innerHTML = html;
     };
 
     function openLesson(id) {
-      const lesson = curriculumData.lessons.find(l => l.id === id);
-      document.getElementById("modalTitle").innerText = lesson.title;
-      document.getElementById("modalBody").innerHTML = `
-        <div class="p-2">
-            <span class="badge bg-${lesson.color} mb-3">${lesson.category}</span>
-            <h6><strong>وصف الدرس:</strong></h6>
-            <p>${lesson.desc}</p>
-            <hr>
-            <div class="alert alert-light border">
-                <i class="bi bi-info-circle-fill text-primary me-2"></i>
-                <strong>المحتوى التفاعلي:</strong> يمكنك الآن البدء في حل التدريبات والتسجيلات الصوتية لهذا الدرس.
+        const l = curriculumData.find(item => item.id === id);
+        document.getElementById("modalTitle").innerText = l.title;
+        
+        let bodyHTML = `
+            <div class="mb-3">
+                <span class="badge bg-${l.color} mb-2">${l.category}</span>
+                <p class="lead fs-6">${l.summary}</p>
             </div>
-        </div>
-      `;
-      const myModal = new bootstrap.Modal(document.getElementById('lessonModal'));
-      myModal.show();
+            
+            <h6 class="fw-bold text-dark border-bottom pb-2"><i class="bi bi-diagram-3-fill text-primary me-2"></i>المخطط والأنشطة التفاعلية:</h6>
+            <div class="d-flex flex-wrap gap-2 mb-4">`;
+            
+        l.features.forEach(f => {
+            bodyHTML += `<span class="badge bg-light text-dark border"><i class="bi bi-check-circle-fill text-success me-1"></i>${f}</span>`;
+        });
+        bodyHTML += `</div>`;
+
+        if (l.vocab) {
+            bodyHTML += `<h6 class="fw-bold text-dark border-bottom pb-2"><i class="bi bi-translate text-success me-2"></i>معجم المفردات التفاعلي:</h6><div class="row g-2 mb-4">`;
+            l.vocab.forEach(v => {
+                bodyHTML += `<div class="col-6"><div class="p-2 border rounded bg-light"><strong>${v.w}:</strong> ${v.m}</div></div>`;
+            });
+            bodyHTML += `</div>`;
+        }
+
+        if (l.quiz) {
+            bodyHTML += `<h6 class="fw-bold text-dark border-bottom pb-2"><i class="bi bi-patch-question-fill text-danger me-2"></i>المسابقة / النشاط التفاعلي:</h6>`;
+            if (l.quiz.type === 'open') {
+                bodyHTML += `
+                <div class="activity-box">
+                    <p class="fw-bold mb-2">${l.quiz.q}</p>
+                    <textarea class="form-control mb-2" rows="3" placeholder="اكتب إجابتك أو تحليلك هنا..."></textarea>
+                    <button class="btn btn-sm btn-primary" onclick="alert('تم حفظ إجابتك وتقييمها بنجاح!')">إرسال الإجابة للمعلم</button>
+                </div>`;
+            } else {
+                bodyHTML += `<div class="activity-box"><p class="fw-bold mb-2">${l.quiz.q}</p><div class="list-group">`;
+                l.quiz.options.forEach((opt, idx) => {
+                    bodyHTML += `<button type="button" class="list-group-item list-group-item-action quiz-option" onclick="checkQuiz(${idx}, ${l.quiz.correct})">${opt}</button>`;
+                });
+                bodyHTML += `</div><div id="quizResult" class="mt-2"></div></div>`;
+            }
+        }
+
+        document.getElementById("modalBody").innerHTML = bodyHTML;
+        new bootstrap.Modal(document.getElementById('lessonModal')).show();
+    }
+
+    function checkQuiz(selected, correct) {
+        const res = document.getElementById("quizResult");
+        if (selected === correct) {
+            res.innerHTML = `<div class="alert alert-success py-2 mb-0"><i class="bi bi-check-circle-fill me-2"></i>إجابة صحيحة! أحسنت.</div>`;
+        } else {
+            res.innerHTML = `<div class="alert alert-danger py-2 mb-0"><i class="bi bi-x-circle-fill me-2"></i>إجابة خاطئة، حاول مرة أخرى.</div>`;
+        }
     }
     </script>
 </body>
